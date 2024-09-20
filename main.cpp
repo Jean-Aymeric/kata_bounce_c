@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #define FIELD_WIDTH 10
 #define BALL_SPRITE_RIGHT '\\'
@@ -10,14 +11,14 @@
 #define BALL_STARTING_DIRECTION_RIGHT true
 
 int main() {
-    char field[FIELD_WIDTH + 1];
+    std::string field;
     bool isBallMovingRight = BALL_STARTING_DIRECTION_RIGHT;
     bool bounceInProgress = false;
 
+    field.resize(FIELD_WIDTH + (FIELD_HAS_EDGES ? 2 : 0));
     for (char &sprite: field) {
         sprite = EMPTY_SPRITE;
     }
-    field[FIELD_WIDTH] = '\0';
     if (FIELD_HAS_EDGES) {
         field[0] = EDGE_SPRITE;
         field[FIELD_WIDTH - 1] = EDGE_SPRITE;
