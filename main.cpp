@@ -1,6 +1,6 @@
 #include <iostream>
 
-#define FIELD_WIDTH 100
+#define FIELD_WIDTH 10
 #define BALL_SPRITE 'O'
 #define EMPTY_SPRITE '.'
 #define EDGE_SPRITE '|'
@@ -32,24 +32,17 @@ int main() {
         while (field[fieldPosition] != BALL_SPRITE) {
             fieldPosition++;
         }
-
-        if (field[fieldPosition] == BALL_SPRITE) {
-            if (fieldPosition == 0) {
-                field[fieldPosition] = EMPTY_SPRITE;
-                field[fieldPosition + 1] = BALL_SPRITE;
-                isBallMovingRight = true;
-            } else if (fieldPosition == FIELD_HAS_EDGES ? FIELD_WIDTH - 2 : FIELD_WIDTH - 1) {
-                field[fieldPosition] = EMPTY_SPRITE;
-                field[fieldPosition - 1] = BALL_SPRITE;
-                isBallMovingRight = false;
-            } else {
-                field[fieldPosition] = EMPTY_SPRITE;
-                if (isBallMovingRight) {
-                    field[fieldPosition + 1] = BALL_SPRITE;
-                } else {
-                    field[fieldPosition - 1] = BALL_SPRITE;
-                }
-            }
+        if ((fieldPosition == 0 + (FIELD_HAS_EDGES ? 1 : 0)) && !isBallMovingRight) {
+            isBallMovingRight = true;
+        }
+        if ((fieldPosition == FIELD_WIDTH - (1 + (FIELD_HAS_EDGES ? 1 : 0))) && isBallMovingRight) {
+            isBallMovingRight = false;
+        }
+        field[fieldPosition] = EMPTY_SPRITE;
+        if (isBallMovingRight) {
+            field[fieldPosition + 1] = BALL_SPRITE;
+        } else {
+            field[fieldPosition - 1] = BALL_SPRITE;
         }
     }
 
