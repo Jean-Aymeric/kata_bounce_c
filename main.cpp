@@ -1,8 +1,9 @@
 #include <iostream>
 
-#define FIELD_WIDTH 10
-#define BALL_SPRITE 'O'
-#define EMPTY_SPRITE '.'
+#define FIELD_WIDTH 50
+#define BALL_SPRITE_RIGHT '\\'
+#define BALL_SPRITE_LEFT '/'
+#define EMPTY_SPRITE ' '
 #define EDGE_SPRITE '|'
 #define FIELD_HAS_EDGES true
 #define BALL_STARTING_POSITION 0 + (FIELD_HAS_EDGES ? 1 : 0)
@@ -19,7 +20,7 @@ int main() {
         field[0] = EDGE_SPRITE;
         field[FIELD_WIDTH - 1] = EDGE_SPRITE;
     }
-    field[BALL_STARTING_POSITION] = BALL_SPRITE;
+    field[BALL_STARTING_POSITION] = BALL_STARTING_DIRECTION_RIGHT ? BALL_SPRITE_RIGHT : BALL_SPRITE_LEFT;
 
     for (;;) {
         int fieldPosition = 0;
@@ -29,7 +30,7 @@ int main() {
         }
         std::cout << std::endl;
 
-        while (field[fieldPosition] != BALL_SPRITE) {
+        while (field[fieldPosition] != (isBallMovingRight ? BALL_SPRITE_RIGHT : BALL_SPRITE_LEFT)) {
             fieldPosition++;
         }
         if ((fieldPosition == 0 + (FIELD_HAS_EDGES ? 1 : 0)) && !isBallMovingRight) {
@@ -40,9 +41,9 @@ int main() {
         }
         field[fieldPosition] = EMPTY_SPRITE;
         if (isBallMovingRight) {
-            field[fieldPosition + 1] = BALL_SPRITE;
+            field[fieldPosition + 1] = BALL_SPRITE_RIGHT;
         } else {
-            field[fieldPosition - 1] = BALL_SPRITE;
+            field[fieldPosition - 1] = BALL_SPRITE_LEFT;
         }
     }
 
