@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 
-#define FIELD_WIDTH 10
+#define FIELD_INITIAL_WIDTH 10
+#define FIELD_MAX_WIDTH 100
+#define FIELD_MIN_WIDTH 5
 #define BALL_SPRITE_RIGHT '\\'
 #define BALL_SPRITE_LEFT '/'
 #define EMPTY_SPRITE ' '
@@ -14,14 +16,18 @@ int main() {
     std::string field;
     bool isBallMovingRight = BALL_STARTING_DIRECTION_RIGHT;
     bool bounceInProgress = false;
+    int fieldWidth = FIELD_INITIAL_WIDTH;
+    bool fieldIsGrowing;
 
-    field.resize(FIELD_WIDTH + (FIELD_HAS_EDGES ? 2 : 0));
+    srand(time(0));
+
+    field.resize(fieldWidth + (FIELD_HAS_EDGES ? 2 : 0));
     for (char &sprite: field) {
         sprite = EMPTY_SPRITE;
     }
     if (FIELD_HAS_EDGES) {
         field[0] = EDGE_SPRITE;
-        field[FIELD_WIDTH - 1] = EDGE_SPRITE;
+        field[fieldWidth - 1] = EDGE_SPRITE;
     }
     field[BALL_STARTING_POSITION] = BALL_STARTING_DIRECTION_RIGHT ? BALL_SPRITE_RIGHT : BALL_SPRITE_LEFT;
 
@@ -29,6 +35,11 @@ int main() {
         int fieldPosition = 0;
         bounceInProgress = false;
         std::cout << field << std::endl;
+
+        fieldIsGrowing = rand() % 10 == 0;
+        if (fieldWidth == FIELD_MAX_WIDTH) {
+            fieldIsGrowing = false;
+        }
 
         while (field[fieldPosition] != (isBallMovingRight ? BALL_SPRITE_RIGHT : BALL_SPRITE_LEFT)) {
             fieldPosition++;
@@ -38,7 +49,7 @@ int main() {
             bounceInProgress = true;
             field[fieldPosition] = BALL_SPRITE_RIGHT;
         }
-        if ((fieldPosition == FIELD_WIDTH - (1 + (FIELD_HAS_EDGES ? 1 : 0))) && isBallMovingRight) {
+        if ((fieldPosition == fieldWidth - (1 + (FIELD_HAS_EDGES ? 1 : 0))) && isBallMovingRight) {
             isBallMovingRight = false;
             bounceInProgress = true;
             field[fieldPosition] = BALL_SPRITE_LEFT;
@@ -49,6 +60,14 @@ int main() {
                 field[fieldPosition + 1] = BALL_SPRITE_RIGHT;
             } else {
                 field[fieldPosition - 1] = BALL_SPRITE_LEFT;
+            }
+        }
+        if (fieldIsGrowing) {
+            fieldWidth++;
+            field.resize(fieldWidth);
+            field[fieldWidth - 1] = FIELD_HAS_EDGES ? EDGE_SPRITE : EMPTY_SPRITE;
+            if (FIELD_HAS_EDGES) {
+                field[fieldWidth - 2] = EMPTY_SPRITE;
             }
         }
     }
