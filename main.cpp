@@ -1,6 +1,6 @@
 #include <iostream>
 
-#define FIELD_WIDTH 100
+#define FIELD_WIDTH 10
 #define BALL_SPRITE 'O'
 #define EMPTY_SPRITE '.'
 
@@ -15,7 +15,6 @@ int main() {
 
     for (;;) {
         int fieldPosition = 0;
-
         for (char sprite: field) {
             std::cout << sprite;
         }
