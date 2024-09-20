@@ -1,6 +1,6 @@
 #include <iostream>
 
-#define FIELD_WIDTH 50
+#define FIELD_WIDTH 10
 #define BALL_SPRITE_RIGHT '\\'
 #define BALL_SPRITE_LEFT '/'
 #define EMPTY_SPRITE ' '
@@ -10,12 +10,14 @@
 #define BALL_STARTING_DIRECTION_RIGHT true
 
 int main() {
-    char field[FIELD_WIDTH];
+    char field[FIELD_WIDTH + 1];
     bool isBallMovingRight = BALL_STARTING_DIRECTION_RIGHT;
+    bool bounceInProgress = false;
 
     for (char &sprite: field) {
         sprite = EMPTY_SPRITE;
     }
+    field[FIELD_WIDTH] = '\0';
     if (FIELD_HAS_EDGES) {
         field[0] = EDGE_SPRITE;
         field[FIELD_WIDTH - 1] = EDGE_SPRITE;
@@ -24,26 +26,29 @@ int main() {
 
     for (;;) {
         int fieldPosition = 0;
-
-        for (char sprite: field) {
-            std::cout << sprite;
-        }
-        std::cout << std::endl;
+        bounceInProgress = false;
+        std::cout << field << std::endl;
 
         while (field[fieldPosition] != (isBallMovingRight ? BALL_SPRITE_RIGHT : BALL_SPRITE_LEFT)) {
             fieldPosition++;
         }
         if ((fieldPosition == 0 + (FIELD_HAS_EDGES ? 1 : 0)) && !isBallMovingRight) {
             isBallMovingRight = true;
+            bounceInProgress = true;
+            field[fieldPosition] = BALL_SPRITE_RIGHT;
         }
         if ((fieldPosition == FIELD_WIDTH - (1 + (FIELD_HAS_EDGES ? 1 : 0))) && isBallMovingRight) {
             isBallMovingRight = false;
+            bounceInProgress = true;
+            field[fieldPosition] = BALL_SPRITE_LEFT;
         }
-        field[fieldPosition] = EMPTY_SPRITE;
-        if (isBallMovingRight) {
-            field[fieldPosition + 1] = BALL_SPRITE_RIGHT;
-        } else {
-            field[fieldPosition - 1] = BALL_SPRITE_LEFT;
+        if (!bounceInProgress) {
+            field[fieldPosition] = EMPTY_SPRITE;
+            if (isBallMovingRight) {
+                field[fieldPosition + 1] = BALL_SPRITE_RIGHT;
+            } else {
+                field[fieldPosition - 1] = BALL_SPRITE_LEFT;
+            }
         }
     }
 
