@@ -3,7 +3,6 @@
 
 #define FIELD_INITIAL_WIDTH 10
 #define FIELD_MAX_WIDTH 100
-#define FIELD_MIN_WIDTH 5
 #define BALL_SPRITE_RIGHT '\\'
 #define BALL_SPRITE_LEFT '/'
 #define EMPTY_SPRITE ' '
@@ -13,64 +12,64 @@
 #define BALL_STARTING_DIRECTION_RIGHT true
 
 int main() {
-    std::string field;
-    bool isBallMovingRight = BALL_STARTING_DIRECTION_RIGHT;
-    bool bounceInProgress = false;
-    int fieldWidth = FIELD_INITIAL_WIDTH;
-    bool fieldIsGrowing;
+	std::string field;
+	bool isBallMovingRight = BALL_STARTING_DIRECTION_RIGHT;
+	bool bounceInProgress = false;
+	int fieldWidth = FIELD_INITIAL_WIDTH;
+	bool fieldIsGrowing;
 
-    srand(time(0));
+	srand(time(0));
 
-    field.resize(fieldWidth + (FIELD_HAS_EDGES ? 2 : 0));
-    for (char &sprite: field) {
-        sprite = EMPTY_SPRITE;
-    }
-    if (FIELD_HAS_EDGES) {
-        field[0] = EDGE_SPRITE;
-        field[fieldWidth - 1] = EDGE_SPRITE;
-    }
-    field[BALL_STARTING_POSITION] = BALL_STARTING_DIRECTION_RIGHT ? BALL_SPRITE_RIGHT : BALL_SPRITE_LEFT;
+	field.resize(fieldWidth + (FIELD_HAS_EDGES ? 2 : 0));
+	for (char &sprite : field) {
+		sprite = EMPTY_SPRITE;
+	}
+	if (FIELD_HAS_EDGES) {
+		field[0] = EDGE_SPRITE;
+		field[fieldWidth - 1] = EDGE_SPRITE;
+	}
+	field[BALL_STARTING_POSITION] = BALL_STARTING_DIRECTION_RIGHT ? BALL_SPRITE_RIGHT : BALL_SPRITE_LEFT;
 
-    for (;;) {
-        int fieldPosition = 0;
-        bounceInProgress = false;
-        std::cout << field << std::endl;
+	for (;;) {
+		int fieldPosition = 0;
+		bounceInProgress = false;
+		std::cout << field << std::endl;
 
-        fieldIsGrowing = rand() % 10 == 0;
-        if (fieldWidth == FIELD_MAX_WIDTH) {
-            fieldIsGrowing = false;
-        }
+		fieldIsGrowing = rand() % 10 == 0;
+		if (fieldWidth == FIELD_MAX_WIDTH) {
+			fieldIsGrowing = false;
+		}
 
-        while (field[fieldPosition] != (isBallMovingRight ? BALL_SPRITE_RIGHT : BALL_SPRITE_LEFT)) {
-            fieldPosition++;
-        }
-        if ((fieldPosition == 0 + (FIELD_HAS_EDGES ? 1 : 0)) && !isBallMovingRight) {
-            isBallMovingRight = true;
-            bounceInProgress = true;
-            field[fieldPosition] = BALL_SPRITE_RIGHT;
-        }
-        if ((fieldPosition == fieldWidth - (1 + (FIELD_HAS_EDGES ? 1 : 0))) && isBallMovingRight) {
-            isBallMovingRight = false;
-            bounceInProgress = true;
-            field[fieldPosition] = BALL_SPRITE_LEFT;
-        }
-        if (!bounceInProgress) {
-            field[fieldPosition] = EMPTY_SPRITE;
-            if (isBallMovingRight) {
-                field[fieldPosition + 1] = BALL_SPRITE_RIGHT;
-            } else {
-                field[fieldPosition - 1] = BALL_SPRITE_LEFT;
-            }
-        }
-        if (fieldIsGrowing) {
-            fieldWidth++;
-            field.resize(fieldWidth);
-            field[fieldWidth - 1] = FIELD_HAS_EDGES ? EDGE_SPRITE : EMPTY_SPRITE;
-            if (FIELD_HAS_EDGES) {
-                field[fieldWidth - 2] = EMPTY_SPRITE;
-            }
-        }
-    }
+		while (field[fieldPosition] != (isBallMovingRight ? BALL_SPRITE_RIGHT : BALL_SPRITE_LEFT)) {
+			fieldPosition++;
+		}
+		if ((fieldPosition == 0 + (FIELD_HAS_EDGES ? 1 : 0)) && !isBallMovingRight) {
+			isBallMovingRight = true;
+			bounceInProgress = true;
+			field[fieldPosition] = BALL_SPRITE_RIGHT;
+		}
+		if ((fieldPosition == fieldWidth - (1 + (FIELD_HAS_EDGES ? 1 : 0))) && isBallMovingRight) {
+			isBallMovingRight = false;
+			bounceInProgress = true;
+			field[fieldPosition] = BALL_SPRITE_LEFT;
+		}
+		if (!bounceInProgress) {
+			field[fieldPosition] = EMPTY_SPRITE;
+			if (isBallMovingRight) {
+				field[fieldPosition + 1] = BALL_SPRITE_RIGHT;
+			} else {
+				field[fieldPosition - 1] = BALL_SPRITE_LEFT;
+			}
+		}
+		if (fieldIsGrowing) {
+			fieldWidth++;
+			field.resize(fieldWidth);
+			field[fieldWidth - 1] = FIELD_HAS_EDGES ? EDGE_SPRITE : EMPTY_SPRITE;
+			if (FIELD_HAS_EDGES) {
+				field[fieldWidth - 2] = EMPTY_SPRITE;
+			}
+		}
+	}
 
-    return 0;
+	return 0;
 }
